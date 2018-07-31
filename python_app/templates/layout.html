@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+    <head>
+    <title> Querying Service Hierarchy</title>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/main.css') }}">
+   
+   <style>
+   body {
+       background-color:#F9F9F9;
+   }
+   
+   form {
+       width:1000px;
+       margin:auto;
+       margin-top:50px;
+       text-align:center;
+   }
+   
+   .search {
+       width:45%;
+       padding:9px;
+       font-size:20px;
+   }
+   
+   .submit {
+       width:15%;
+       height:20%;
+       padding:10px;
+       font-size:20px;
+       color:#000000;
+   }
+   
+   </style>
+   
+   
+   </head>
+    <body>
+    
+    <div style="font-size:50px;text-align:center;padding:5px;letter-spacing:1px;">
+    <b>Querying Service Hierarchy</b>
+    </div>
+    
+    {% block content %}
+    {% endblock %}
+    
+    </body>
+</html>
