@@ -17,20 +17,23 @@ else:
      
         if request.method == 'POST':
             name=request.form['name']
-            print (name)
      
             if form.validate():
                 # Save the comment here.
+                flash("hello")
                 flash(lookup(name,searchingDictionary()))
             else:
                 flash('All the form fields are required. ')
      
         return render_template('index.html', form=form)
     
-    def cleaningLists(list):
+    def cleaningLists(list): # removes all those entries that have a None value
         for l in list[:]:
             if l[1] == None:
                 list.remove(l)
+                
+    def getTableName(d1,d2,d3,d4,d5,d6,d7,d8,d9,d10,d11):
+        return 
                 
     def searchByValue(d,v):
         listOfKeys = [key  for (key, value) in d.items() if value == v]
@@ -118,17 +121,125 @@ else:
             cleaningLists(evbbatchmetrics)
             d11 = dict(evbbatchmetrics)
                
-             
             z = {**d1,**d2,**d3,**d4,**d5,**d6,**d7,**d8,**d9,**d10,**d11}
+            
+            d1_list = []
+            for d in d1:
+                d1_list.append(d)
+                
+            d2_list = []
+            for d in d2:
+                d2_list.append(d)
+            
+            d3_list = []
+            for d in d3:
+                d3_list.append(d)
+                
+            d4_list = []
+            for d in d4:
+                d4_list.append(d)
+                
+            d5_list = []
+            for d in d5:
+                d5_list.append(d)
+                
+            d6_list = []
+            for d in d6:
+                d6_list.append(d)
+                
+            d7_list = []
+            for d in d7:
+                d7_list.append(d)
+                
+            d8_list = []
+            for d in d8:
+                d8_list.append(d)
+                
+            d9_list = []
+            for d in d9:
+                d9_list.append(d)
+                
+            d10_list = []
+            for d in d10:
+                d10_list.append(d)
+                
+            d11_list = []
+            for d in d11:
+                d11_list.append(d)
+                
+            
+                
+                
+            
+            # all of the map_dotcom services have been associated with the table
+            tb_dict1 = {
+                    'map_dotcom': [d1_list]
+            }
+            
+            tb_dict2 = {
+                    'map_dataleaks': [d2_list]
+            }
+            
+            tb_dict3 = {
+                    'map_servicenow': [d3_list]
+            }
+
+            tb_dict4 = {
+                    'map_isrisk': [d4_list]
+            }
+
+            tb_dict5 = {
+                    'map_gdpr': [d5_list]
+            }            
+            
+            tb_dict6 = {
+                    'map_pentest': [d6_list]
+            }
+            
+            tb_dict7 = {
+                    'map_remoteconnectivity': [d7_list]
+            }
+            
+            tb_dict8 = {
+                    'map_bcp': [d8_list]
+            }
+            
+            tb_dict9 = {
+                    'map_pas': [d9_list]
+            }
+            
+            tb_dict10 = {
+                    'control': [d10_list]
+            }
+            
+            tb_dict11 = {
+                    'evbbatchmetrics': [d11_list]
+            }
+            
+            
+            tables_dict = {**tb_dict1,**tb_dict2,**tb_dict3,**tb_dict4,**tb_dict5,
+                           **tb_dict6,**tb_dict7,**tb_dict8,**tb_dict9,**tb_dict10,
+                           **tb_dict11}
+            
+           
+            
+            
+        
+            
+         
         
         # groups together all the entries keys that have the same value
         # i.e. have the same masterserviceid, so are the same products but under
-        # different names    
+        # different names   
+            
             sorted_dict = {}
             for k, v in z.items():
                 sorted_dict.setdefault(v, []).append(k)
-                
+        
+        
         return z # perhaps consider storing this in some sort of table format
+    
+    # for every element in z, we want to get the table name that it comes from
             
         #for key,val in sorted_dict.items():
             #print(key,'=>',val)
