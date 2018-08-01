@@ -27,11 +27,10 @@ else:
      
         return render_template('index.html', form=form)
     
-    def cleaningLists(list): # removes all those entries that have a None value
+    def cleaningLists(list):
         for l in list[:]:
             if l[1] == None:
                 list.remove(l)
-            
                 
     def searchByValue(d,v):
         listOfKeys = [key  for (key, value) in d.items() if value == v]
@@ -119,9 +118,30 @@ else:
             cleaningLists(evbbatchmetrics)
             d11 = dict(evbbatchmetrics)
                
+             
             z = {**d1,**d2,**d3,**d4,**d5,**d6,**d7,**d8,**d9,**d10,**d11}
-            
+        
+        # groups together all the entries keys that have the same value
+        # i.e. have the same masterserviceid, so are the same products but under
+        # different names    
             sorted_dict = {}
             for k, v in z.items():
                 sorted_dict.setdefault(v, []).append(k)
+                
+        return z # perhaps consider storing this in some sort of table format
+    
+    # for every element in z, we want to get the table name that it comes from
+            
+        #for key,val in sorted_dict.items():
+            #print(key,'=>',val)
+            
+        #print(z['Transportation - Business Segment'])
+        
+        # they specify a certain key
+        # find the value of that key
+        # use the value to find all the other keys that have the same value
+        
+        
+        
+        # lets you search for the word in a dictionary
         
