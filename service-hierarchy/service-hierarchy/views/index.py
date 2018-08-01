@@ -125,7 +125,7 @@ def searchingDictionary():
         for k, v in z.items():
             sorted_dict.setdefault(v, []).append(k)
             
-    return z
+    return z # perhaps consider storing this in some sort of table format
         
     #for key,val in sorted_dict.items():
         #print(key,'=>',val)
