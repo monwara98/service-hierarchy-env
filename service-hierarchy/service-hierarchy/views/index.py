@@ -1,6 +1,8 @@
 from flask import Blueprint, render_template, flash, request
 from wtforms import Form, TextField, validators
 import psycopg2 as p
+from tabulate import tabulate
+from prettytable import PrettyTable
 
 class ReusableForm(Form):
     name = TextField('', validators=[validators.required()])
@@ -47,8 +49,15 @@ else:
         else:
             return "search not found"
         
+    
+    def populateTable(list):
+        if len(list) > 0:
+            t = PrettyTable(['Table', 'Service'])
+            for x in list:
+                t.add_row(x)
+        return t
         
-        
+    
     def searchingDictionary(word):
         try:
             con = p.connect("dbname='odi' user='fmopex_test_ro' host='fmopex.cl19fspdhrve.eu-west-1.rds.amazonaws.com' password = 'admin'")
@@ -120,18 +129,27 @@ else:
                 for key,value in x.items():
                     if value == a:
                         print(key)
+        
             
             y = []
             for a in w: # a is the word
                 for t in tables:
                     if a in x.get(t):
-                        y.append(t + ' -> ' + a)
+                        y.append([t,a])
+                        #y.append(t + ' -> ' + a)
+                        
+            #print(tabulate(y, headers=['Table', 'Service']))     
+            t = PrettyTable(['Table', 'Service'])
+            for x in y:
+                t.add_row(x)
+            #print(t)
                         
             if len(y) == 0:
                 return 'no matches found'
             else:
-                return y
+                return populateTable(y)
+                #return tabulate(y, headers=['Table', 'Service'], tablefmt='orgtbl')
            
-    
+        
 
         
