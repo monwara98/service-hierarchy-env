@@ -90,10 +90,8 @@ else:
                 d = dict(l)
                 x[t] = d
                 
-            tables = ['isin','map_bcp','map_dataleaks','map_dotcom','map_gdpr',
-                      'map_isrisk', 'map_pas', 'map_pentest','map_remoteconnectivity',
-                      'map_servicenow', 'problem', 'problem_old']
-                
+            
+            # find a way to automate this 
             d1 = x.get('isin')
             d2 = x.get('map_bcp')
             d3 = x.get('map_dataleaks')
