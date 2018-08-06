@@ -5,16 +5,15 @@
 {% with messages = get_flashed_messages(with_categories=true) %}
 
 <form action="" method="post">
-            {{ form.csrf }}
+           <!-- {{ form.csrf }} -->
  
-            <div class="input text">
-                {{ form.name.label }} {{ form.name }}
+            <div class="inputtext">
+                {{ form.name.label }} {{ form.name }} 
             </div>
  
-            <div class="input submit">
+            <div class="inputsubmit">
                 <input type="submit" value="Submit" />
-            </div>
-        </form>
+            </div> 
 
         <div class="info">
             {% if messages %}
@@ -26,6 +25,21 @@
             {% endif %}
         {% endwith %}
         </div>
+        
+        <table border='1'>
+        <tr>
+        <th>Table Name</th>
+        <th> Product</th>
+        </tr>
+        
+        {% for x in yList %}
+            <tr>
+            <td>{{ x[0] }}</td>
+            <td>{{ x[1] }}</td>
+            </tr>
+        {% endfor %}
+        </table>
+        
         
 
 

@@ -3,10 +3,10 @@ from wtforms import Form, TextField, validators
 import psycopg2 as p
 from tabulate import tabulate
 from prettytable import PrettyTable
+from flask_table import Table, Col
 
 class ReusableForm(Form):
     name = TextField('', validators=[validators.required()])
-    
     
     
 try:
@@ -23,11 +23,13 @@ else:
             name=request.form['name']
      
             if form.validate(): # save the comment here
-                flash(searchingDictionary(name))
+                yList = searchingDictionary(name)
+                #flash(displayData(searchingDictionary(name)))
+                #flash(searchingDictionary(name))
             else:
                 flash('All the form fields are required. ')
      
-        return render_template('index.html', form=form)
+        return render_template('index.html', form=form, yList=yList)
     
     def cleaningLists(list):
         for l in list[:]:
@@ -137,19 +139,32 @@ else:
                     if a in x.get(t):
                         y.append([t,a])
                         #y.append(t + ' -> ' + a)
-                        
-            #print(tabulate(y, headers=['Table', 'Service']))     
+                         
             t = PrettyTable(['Table', 'Service'])
             for x in y:
                 t.add_row(x)
-            #print(t)
                         
             if len(y) == 0:
                 return 'no matches found'
             else:
-                return populateTable(y)
+                return y
+                #print(t)
+                #return populateTable(y)
                 #return tabulate(y, headers=['Table', 'Service'], tablefmt='orgtbl')
            
+    def displayData(y):
         
-
+        return "<table border='1'><tr><th>Table</th><th>Product</th></tr>"
+        
+        print("<table border='1'>")
+        print("<tr>")
+        print("<th>Table</th>")
+        print("<th>Product</th>")
+        print("</tr>")
+        for x in y:
+            print("<tr>")
+            print("<td>{0}</td>".format(x[0]))
+            print("<td>{0}</td>".format(x[1]))
+            print("</tr>")
+        print("</table>")
         
