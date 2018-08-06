@@ -20,9 +20,11 @@ else:
             name=request.form['name']
      
             if form.validate(): # save the comment here
-                yList = searchingDictionary(name)
-                #flash(displayData(searchingDictionary(name)))
-                #flash(searchingDictionary(name))
+                if len(searchingDictionary(name)) > 0:
+                    yList = searchingDictionary(name)
+                else:
+                    yList = []
+                    flash("search not found")
             else:
                 flash('All the form fields are required. ')
      
@@ -47,14 +49,6 @@ else:
             return searchByValue(d,k)
         else:
             return "search not found"
-        
-    
-    def populateTable(list):
-        if len(list) > 0:
-            t = PrettyTable(['Table', 'Service'])
-            for x in list:
-                t.add_row(x)
-        return t
         
     
     def searchingDictionary(word):
@@ -114,9 +108,6 @@ else:
             d12 = x.get('problem_old')
             
             z = {**d1,**d2,**d3,**d4,**d5,**d6,**d7,**d8,**d9,**d10,**d11,**d12}
-            
-            #if 'Janes_Search_Report' in x.get('map_dotcom'): 
-            #    print('map_pentest -> DSMatch')
         
             sorted_dict = {}
             for k, v in z.items():
@@ -135,14 +126,9 @@ else:
                 for t in tables:
                     if a in x.get(t):
                         y.append([t,a])
-                        #y.append(t + ' -> ' + a)
                          
                         
-            if len(y) == 0:
-                return 'no matches found'
             else:
                 return y
-                #return populateTable(y)
-                #return tabulate(y, headers=['Table', 'Service'], tablefmt='orgtbl')
    
         
