@@ -62,6 +62,8 @@ else:
             cursor = con.cursor() 
             
             x = {}
+            
+            # perhaps consider automating this as well
             tables = ['isin','map_bcp','map_dataleaks','map_dotcom','map_gdpr',
                       'map_isrisk', 'map_pas', 'map_pentest','map_remoteconnectivity',
                       'map_servicenow', 'problem', 'problem_old']
@@ -90,33 +92,57 @@ else:
                 d = dict(l)
                 x[t] = d
                 
+            #my_dict = {}
+            #my_list = []
+            #my_dict = x.get('isin')
+            #my_dict = x.get('map_pentest')
+            #print(my_dict)
+            
+            #my_list.append(x.get('isin'))
+            #my_list.append(x.get('map_pentest'))
+            #print(my_list)
+            
+            #my_list = dict(my_list)
+            #print(my_list)
+                
+            # find a way to loop through the 'tables' list and add them all to
+            # the dictionary.
             
             # find a way to automate this 
-            d1 = x.get('isin')
-            d2 = x.get('map_bcp')
-            d3 = x.get('map_dataleaks')
-            d4 = x.get('map_dotcom')
-            d5 = x.get('map_gdpr')
-            d6 = x.get('map_isrisk')
-            d7 = x.get('map_pas')
-            d8 = x.get('map_pentest')
-            d9 = x.get('map_remoteconnectivity')
-            d10 = x.get('map_servicenow')
-            d11 = x.get('problem')
-            d12 = x.get('problem_old')
+            #d1 = x.get('isin')
+            #d2 = x.get('map_bcp')
+            #d3 = x.get('map_dataleaks')
+            #d4 = x.get('map_dotcom')
+            #d5 = x.get('map_gdpr')
+            #d6 = x.get('map_isrisk')
+            #d7 = x.get('map_pas')
+            #d8 = x.get('map_pentest')
+            #d9 = x.get('map_remoteconnectivity')
+            #d10 = x.get('map_servicenow')
+            #d11 = x.get('problem')
+            #d12 = x.get('problem_old')
             
-            z = {**d1,**d2,**d3,**d4,**d5,**d6,**d7,**d8,**d9,**d10,**d11,**d12}
+            z = {}
+            for t in tables:
+                try:
+                    d = x.get(t)
+                except Exception as e:
+                    exit()
+                else:
+                    z = {**z,**d} # updayed the dictionary each time
+            #print(z)
+            
+            #z = {**d1,**d2,**d3,**d4,**d5,**d6,**d7,**d8,**d9,**d10,**d11,**d12}
+            #print(z)
+            #z = {**d1}
+            #z = {**z,**d2}
+            #print(z)
         
             sorted_dict = {}
             for k, v in z.items():
                 sorted_dict.setdefault(v, []).append(k)
                 
             w = lookup(word,z)
-            
-            for a in w:
-                for key,value in x.items():
-                    if value == a:
-                        print(key)
         
             
             y = []
