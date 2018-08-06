@@ -21,6 +21,7 @@ else:
             name=request.form['name']
      
             if form.validate(): # save the comment here
+                testingSomething()
                 if len(searchingDictionary(name)) > 0:
                     yList = searchingDictionary(name)
                 else:
@@ -50,6 +51,78 @@ else:
         else:
             return "search not found"
         
+    def testingSomething():
+        try:
+            con = p.connect("dbname='odi' user='fmopex_test_ro' host='fmopex.cl19fspdhrve.eu-west-1.rds.amazonaws.com' password = 'admin'")
+        except Exception as e:
+            print("\ncould not connect to database\n")
+        else:
+            print("\nconnected to database\n")
+            
+        cursor = con.cursor()
+        cursor.execute("select relname from pg_class where relkind='r' and relname !~ '^(pg_|sql_)';")
+        row = cursor.fetchall()
+        
+        y = list(set(row))
+        table_names = []
+        for r in row:
+            table_names.append(r[0])
+        
+        table_names = list(set(table_names))
+        
+        cursor.execute("select * from odi_test.problem")
+        l = cursor.fetchall()
+        colnames = [desc[0] for desc in cursor.description]
+        print(colnames)
+        
+        
+        
+        print(len(table_names))
+        
+        for t in table_names:
+            try:
+                cursor.execute("select * from odi_test." + t)
+                l = cursor.fetchall()
+            except Exception as e:
+                table_names.remove(t)
+            else:
+                colnames = [desc[0] for desc in cursor.description]
+                if (('business_service' in colnames) & ('number' in colnames)):
+                    pass
+                elif (('u_business_service' in colnames) & ('number' in colnames)):
+                    pass
+                elif (('masterserviceid' in colnames) & ('service' in colnames)):
+                    pass
+                elif (('masterserviceid' in colnames) & ('name' in colnames)):
+                    pass
+                else:
+                    table_names.remove(t)
+            
+        print(len(table_names))
+        
+        for t in table_names:
+            print(t)
+        
+       
+            
+        #tab = []
+            
+        #for r in row:
+        #    try:
+        #        cursor.execute("select * from odi_test." + r[0])
+        #        colnames = [desc[0] for desc in cursor.description]
+        #    except Exception as e:
+        #        return "hello"
+        #    else:
+        #        if (('masterserviceid' in colnames) & ('service' in colnames)) or (('name' in colnames) & ('masterserviceid' in colnames)):
+        #            if (('u_business_service' in colnames) & ('number' in colnames)) or (('business_service' in colnames) & ('number' in colnames)):
+        #                tab.append(r[0])
+                        
+                
+        #        print("hello")
+        #        for t in tab:
+        #            print(t)
+        
     
     def searchingDictionary(word):
         try:
@@ -61,11 +134,23 @@ else:
         
             cursor = con.cursor() 
             
+            
+            #for r in row:
+                #print(r)
+                #cursor.execute("select * from odi_test." + r[0])
+                #li = cursor.fetchall()
+                #print(li)
+            
             x = {}
+            
+            # 1. loop through all of the tables in the odi_test database
+            # 2. only add those databases that have 'number' or 'masterserviceid' as
+            # their column names
+            # 3. only accept those databases that have some actual data[rows] in them
             
             # perhaps consider automating this as well
             tables = ['isin','map_bcp','map_dataleaks','map_dotcom','map_gdpr',
-                      'map_isrisk', 'map_pas', 'map_pentest','map_remoteconnectivity',
+                      'map_isrisk', 'map_pentest','map_remoteconnectivity',
                       'map_servicenow', 'problem', 'problem_old']
             for t in tables:
                 cursor.execute("select * from odi_test." + t)
