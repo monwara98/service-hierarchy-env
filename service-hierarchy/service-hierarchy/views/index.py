@@ -15,6 +15,7 @@ else:
     @bp.route("/", methods=['GET', 'POST'])
     def hello():
         form = ReusableForm(request.form)
+        yList = []
      
         if request.method == 'POST':
             name=request.form['name']
@@ -23,7 +24,6 @@ else:
                 if len(searchingDictionary(name)) > 0:
                     yList = searchingDictionary(name)
                 else:
-                    yList = []
                     flash("search not found")
             else:
                 flash('All the form fields are required. ')
