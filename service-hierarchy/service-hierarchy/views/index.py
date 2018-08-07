@@ -21,7 +21,7 @@ else:
             name=request.form['name']
      
             if form.validate(): # save the comment here
-                testingSomething()
+                #testingSomething()
                 if len(searchingDictionary(name)) > 0:
                     yList = searchingDictionary(name)
                 else:
@@ -39,14 +39,20 @@ else:
                 
                 
     def searchByValue(d,v):
-        listOfKeys = [key  for (key, value) in d.items() if value == v]
+        try:
+            listOfKeys = [key  for (key, value) in d.items() if value == v]
+        except Exception as e:
+            listOfKeys = []
         return listOfKeys
     
     
     
     def lookup(word,d):
         if word in d:
-            k = d[word] 
+            try:
+                k = d[word] 
+            except Exception as e:
+                k = 0
             return searchByValue(d,k)
         else:
             return "search not found"
@@ -63,7 +69,6 @@ else:
         cursor.execute("select relname from pg_class where relkind='r' and relname !~ '^(pg_|sql_)';")
         row = cursor.fetchall()
         
-        y = list(set(row))
         table_names = []
         for r in row:
             table_names.append(r[0])
@@ -150,7 +155,7 @@ else:
             
             # perhaps consider automating this as well
             tables = ['isin','map_bcp','map_dataleaks','map_dotcom','map_gdpr',
-                      'map_isrisk', 'map_pentest','map_remoteconnectivity',
+                      'map_isrisk', 'map_pas', 'map_pentest','map_remoteconnectivity',
                       'map_servicenow', 'problem', 'problem_old']
             for t in tables:
                 cursor.execute("select * from odi_test." + t)
