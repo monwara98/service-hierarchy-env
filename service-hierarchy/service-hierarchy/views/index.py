@@ -1,10 +1,14 @@
-from flask import Blueprint, render_template, flash, request
+from flask import Blueprint, render_template, flash, request, redirect, url_for, jsonify
 from wtforms import Form, TextField, validators
 import psycopg2 as p
+from multiprocessing import Value
+
 
 class ReusableForm(Form):
     name = TextField('', validators=[validators.required()])
+        
     
+counter = Value('i', 0)    
     
 try:
     bp = Blueprint(__name__, __name__, template_folder='templates')
@@ -16,6 +20,10 @@ else:
     def hello():
         form = ReusableForm(request.form)
         yList = []
+        with counter.get_lock():
+            counter.value += 1
+        c = jsonify(count=counter.value)
+        print(c)
      
         if request.method == 'POST':
             name=request.form['name']
@@ -29,7 +37,11 @@ else:
             else:
                 flash('All the form fields are required. ')
      
+        # if button clicked once
         return render_template('index.html', form=form, yList=yList)
+    
+        # if button clicked twice
+        return redirect(url_for('service_hierarchy.views.index.hello'))
     
     def cleaningLists(list):
         for l in list[:]:
@@ -239,10 +251,9 @@ else:
             for a in w: # a is the word
                 for t in tables:
                     if a in x.get(t):
-                        y.append([t,a])
-                         
+                        y.append([t.lower(),a.lower()])
                         
-            else:
-                return y
+                         
+            return y
    
         
