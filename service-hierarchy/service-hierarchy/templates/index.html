@@ -5,7 +5,7 @@
 {% with messages = get_flashed_messages(with_categories=true) %}
 
 <form action="" method="post">
-           <!-- {{ form.csrf }} -->
+           {{ form.csrf }} 
  
             <div class="inputtext">
                 {{ form.name.label }} {{ form.name }} 

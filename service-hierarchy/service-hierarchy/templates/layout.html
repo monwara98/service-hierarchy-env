@@ -25,6 +25,13 @@
        margin-top:50px;
    }
    
+   .inputtext input { <!--just take this off if the position of the search bar doesn't work -->
+       position:absolute;
+       height:25px;
+       width:230px;
+       text-align:center;
+   }
+   
    .inputsubmit {
        margin-top:5px;
    }
@@ -33,6 +40,7 @@
        height:100%
        width:100%
        display:table
+       padding-bottom:30px
    }
    
    #tableContainer-2 {
@@ -55,8 +63,6 @@
     <div style="font-size:50px;text-align:center;padding:5px;letter-spacing:1px;">
     <b>Querying Service Hierarchy</b>
     </div>
-    
-    
     
     {% block content %}
     {% endblock %}
