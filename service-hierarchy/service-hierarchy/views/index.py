@@ -1,14 +1,12 @@
-from flask import Blueprint, render_template, flash, request, redirect, url_for, jsonify
+from flask import Blueprint, render_template, flash, request 
 from wtforms import Form, TextField, validators
 import psycopg2 as p
-from multiprocessing import Value
 
 
 class ReusableForm(Form):
     name = TextField('', validators=[validators.required()])
         
     
-counter = Value('i', 0)    
     
 try:
     bp = Blueprint(__name__, __name__, template_folder='templates')
@@ -20,10 +18,6 @@ else:
     def hello():
         form = ReusableForm(request.form)
         yList = []
-        with counter.get_lock():
-            counter.value += 1
-        c = jsonify(count=counter.value)
-        print(c)
      
         if request.method == 'POST':
             name=request.form['name']
@@ -41,7 +35,7 @@ else:
         return render_template('index.html', form=form, yList=yList)
     
         # if button clicked twice
-        return redirect(url_for('service_hierarchy.views.index.hello'))
+        # return redirect(url_for('service_hierarchy.views.index.hello'))
     
     def cleaningLists(list):
         for l in list[:]:
@@ -254,6 +248,7 @@ else:
                         y.append([t.lower(),a.lower()])
                         
                          
+            
             return y
    
         
