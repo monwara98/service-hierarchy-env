@@ -20,6 +20,9 @@ else:
      
         if request.method == 'POST':
             name=(request.form['name']).lower()
+            #dropdown_id = request.form['ID']
+            #print(dropdown_id)
+            
             if form.validate(): # save the comment here
                 if searchingDictionary(name) == "no matches found":
                     flash("no matches found")
