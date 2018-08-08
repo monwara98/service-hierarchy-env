@@ -32,8 +32,18 @@ else:
                     flash("search not found")
             else:
                 flash('All the form fields are required. ')
-     
-        return render_template('index.html', form=form, yList=yList)
+                
+        #if request.method == 'GET':
+        #    colours = ['Red', 'Blue', 'Black', 'Orange']
+        tables = ['', 'map_dotcom', 'map_dataleaks', 'map_servicenow', 'map_gdpr', 
+                      'map_pentest', 'map_remoteconnectivity', 'map_bcp', 'map_pas',
+                      'masterservicemapping']
+        
+        return render_template('index.html', form=form, yList=yList, tables=tables)
+    
+    
+        
+    
     
     def cleaningLists(list):
         for l in list[:]:

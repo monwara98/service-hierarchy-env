@@ -28,6 +28,16 @@
         {% endwith %}
         </div>
         
+        <div class="dropdown">
+        <select name="tables" method="GET" action="/">
+            <option value="{{tables[0]}}" selected>{{tables[0]}}</option>
+            {% for t in tables[1:] %}
+                <option value="{{t}}">{{t}}</option>
+            {% endfor %}
+        </select>
+        </div>
+            
+        
         <div id="tableContainer-1">
         <div id="tableCountainer-2">
         <table id="myTable" border='1'>
