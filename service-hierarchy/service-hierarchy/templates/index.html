@@ -43,7 +43,7 @@
         
         <div id="tableContainer-1">
         <div id="tableCountainer-2">
-        <table id="myTable" border='1'>
+        <table id="myTable" border='2'>
         <tr>
         <th>Table Name</th>
         <th> Product</th>
@@ -51,8 +51,9 @@
         
         {% for x in new_list %}
             <tr>
-            <td>{{ x[0] }}</td>
-            <td>{{ x[1] }}</td>
+            <td><div style="padding:5px;">
+            {{ x[0] }}</td>
+            <td>{{ x[1] }}</div></td>
             </tr>
         {% endfor %}
         </table>
