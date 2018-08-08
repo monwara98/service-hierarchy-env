@@ -28,13 +28,20 @@
    .inputtext input { <!--just take this off if the position of the search bar doesn't work -->
        position:absolute;
        height:25px;
-       width:250px;
+       width:240px;
        text-align:left;
        padding:3px;
    }
    
    .submit {
-       margin-top:5px;
+       margin-top:10px;
+       margin-bottom:20px;
+   }
+   
+   .submit input {
+       text-align:center;
+       padding-left:8px;
+       padding-right:8px;
    }
    
    #tableContainer-1 {
@@ -54,14 +61,36 @@
        margin:0 auto
    }
    
-   .dropdown {
-       margin-bottom:20px;
-   }
-   
-   
+   .styled-select {
+       background: url(http://i62.tinypic.com/15xvbd5.png) no-repeat 96% 0;
+       height: 29px;
+       overflow: hidden;
+       width: 250px;
+    }
+
+   .styled-select select {
+       background: transparent;
+       border: none;
+       font-size: 14px;
+       height: 29px;
+       padding: 5px; 
+       width: 268px;
+    }
+
+   .styled-select.slate {
+       background: url(http://i62.tinypic.com/2e3ybe1.jpg) no-repeat right center;
+       height: 34px;
+       width: 250px;
+    }
+
+   .styled-select.slate select {
+       border: 1px solid #CCCCCC;
+       font-size: 16px;
+       height: 34px;
+       width: 268px;
+    }
+
    </style>
-   
-   <script src="https://code.jquery.com/jquery-1.10.2.js"></script>
    
    </head>
     <body>
@@ -69,14 +98,6 @@
     <div style="font-size:50px;text-align:center;padding:5px;letter-spacing:1px;">
     <b>Querying Service Hierarchy</b>
     </div>
-    
-    <script>
-    
-    $( "submit" ).click(function() {
-        $( "hide" ).empty();
-    });
-    
-    </script>
     
     {% block content %}
     {% endblock %}

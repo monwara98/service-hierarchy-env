@@ -12,10 +12,6 @@
                 {{ form.name.label }} {{ form.name }} 
             </div>
             </div>
- 
-            <div class="submit">
-                <input type="submit" value="Submit" />
-            </div> 
 
         <div class="info" style="text-align:center;">
             {% if messages %}
@@ -28,7 +24,8 @@
         {% endwith %}
         </div>
         
-        <div class="dropdown">
+        <div align="center">
+        <div class="styled-select slate" style="text-align:center;">
         <select name="drop_down" method="GET" action="/">
             <option value="{{tables[0]}}" selected>choose table</option>
             {% for t in tables[1:] %}
@@ -36,7 +33,12 @@
             {% endfor %}
             
         </select>
-        </div>
+        </div></div>
+        
+        
+        <div class="submit">
+            <input type="submit" value="Submit" />
+        </div> 
             
         
         <div id="tableContainer-1">

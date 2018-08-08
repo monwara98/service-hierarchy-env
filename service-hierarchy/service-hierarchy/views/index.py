@@ -24,27 +24,17 @@ else:
      
         if request.method == 'POST':
             name=(request.form['name']).lower()
-            #dropdown_id = request.form['ID']
-            #print(dropdown_id)
+            
             if form.validate(): # save the comment here
+                
                 if searchingDictionary(name) == "no matches found":
                     flash("no matches found")
+                    
                 elif len(searchingDictionary(name)) > 0:
+                    
                     try:
                         yList = searchingDictionary(name)
                         selection = request.form.get('drop_down')
-                        
-                        #for t in tables:
-                        #    if selection == t:
-                        #        for y in yList:
-                        #            if y[0] == t:
-                        #                new_list.append(y)
-                        #        
-                        #    elif selection == '':
-                        #        new_list = searchingDictionary(name)    
-                        #
-                        #    else:
-                        #        new_list = []
                         
                         if selection == 'map_dotcom':
                             for y in yList:
@@ -95,8 +85,8 @@ else:
                             new_list = searchingDictionary(name)
                         
                         else:
+                            flash("no matches found")
                             new_list = []
-                        
                         
                        
                     except Exception as e:
@@ -109,8 +99,6 @@ else:
         
         return render_template('index.html', form=form, new_list=new_list, tables=tables)
     
-    
-        
     
     
     def cleaningLists(list):
