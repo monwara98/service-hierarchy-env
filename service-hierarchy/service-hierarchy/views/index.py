@@ -7,7 +7,6 @@ class ReusableForm(Form):
     name = TextField('', validators=[validators.required()])
         
     
-    
 try:
     bp = Blueprint(__name__, __name__, template_folder='templates')
 except Exception as e:
@@ -22,19 +21,19 @@ else:
         if request.method == 'POST':
             name=(request.form['name']).lower()
             if form.validate(): # save the comment here
-                #testingSomething()
-                if len(searchingDictionary(name)) > 0:
-                    yList = searchingDictionary(name)
+                if searchingDictionary(name) == "no matches found":
+                    flash("no matches found")
+                elif len(searchingDictionary(name)) > 0:
+                    try:
+                        yList = searchingDictionary(name)
+                    except Exception as e:
+                        yList = []
                 else:
                     flash("search not found")
             else:
                 flash('All the form fields are required. ')
      
-        # if button clicked once
         return render_template('index.html', form=form, yList=yList)
-    
-        # if button clicked twice
-        # return redirect(url_for('service_hierarchy.views.index.hello'))
     
     def cleaningLists(list):
         for l in list[:]:
@@ -43,19 +42,18 @@ else:
                 
     
     def lower_dict(d):
-                new_dict = dict((k.lower(), v) for k, v in d.items())
-                return new_dict
+        try:
+            new_dict = dict((k.lower(), v) for k, v in d.items())
+        except Exception as e:
+            new_dict = {}
+        else:
+            return new_dict
                 
                 
                 
     def searchByValue(d,v):
-        #print("\nsearch by value method")
         try:
-         #   print("\nin the try block")
             listOfKeys = [key  for (key, value) in d.items() if value == v]
-          #  for l in listOfKeys:
-           #     print(l)
-            #print(len(listOfKeys))
         except Exception as e:
             listOfKeys = []
             return listOfKeys
@@ -66,17 +64,12 @@ else:
     
     def lookup(word,d):
         if word in d:
-            #print("\nare we inside here?")
-            k = d[word]
-            #print("\nk is: " + k)
-            #for s in searchByValue(d,k):
-            #    print(s)
-            return searchByValue(d,k)
-        #    try:
-        #        k = d[word] 
-        #    except Exception as e:
-        #        k = 0
-        #    return searchByValue(d,k)
+            try:
+                k = d[word]
+            except Exception as e:
+                k = 0
+            else:
+                return searchByValue(d,k)
         else:
             return "search not found"
         
@@ -103,42 +96,85 @@ else:
                 colnames = [desc[0] for desc in cursor.description]
                 
                 if 'masterserviceid' in colnames:
+                    
                     if 'service' in colnames:
-                        cursor.execute("select service,masterserviceid from odi_test." + t)
-                        l = cursor.fetchall()
+                        try:
+                            cursor.execute("select service,masterserviceid from odi_test." + t)
+                            l = cursor.fetchall()
+                        except Exception as e:
+                            l = []
+                            
                     elif 'name' in colnames:
-                        cursor.execute("select name,masterserviceid from odi_test." + t)
-                        l = cursor.fetchall()
+                        try:
+                            cursor.execute("select name,masterserviceid from odi_test." + t)
+                            l = cursor.fetchall()
+                        except Exception as e:
+                            l = []
+                            
                 elif ('service' in colnames) & ('pkey' in colnames):
-                    print("hello?")
-                    cursor.execute("select service,pkey from odi_test." + t)
-                    l = cursor.fetchall()
+                    try:
+                        cursor.execute("select service,pkey from odi_test." + t)
+                        l = cursor.fetchall()
+                    except Exception as e:
+                        l = []
+                        
                 else:
                     l = []
                 
              
                 cleaningLists(l)
-                d = dict(l)
-                d1 = lower_dict(d)
-                x[t] = d1
+                
+                try:
+                    d = dict(l)
+                except Exception as e:
+                    d = {}
+                
+                try:
+                    d1 = lower_dict(d)
+                except Exception as e:
+                    d1 = {}
+                
+                try:
+                    x[t] = d1
+                except Exception as e:
+                    x[t] = {}
                 
                 
             z = {}
             for t in tables:
-                d = x.get(t)
-                d1 = lower_dict(d)
-                z = {**z,**d1}
                 
+                try:
+                    d = x.get(t)
+                except Exception as e:
+                    d = {}
+                    
+                try:    
+                    d1 = lower_dict(d)
+                except Exception as e:
+                    d1 = {}
+                    
+                try:
+                    z = {**z,**d1}
+                except Exception as e:
+                    z = {}
                 
-            w = lookup(word,z)
-            
+            try:
+                w = lookup(word,z)
+            except Exception as e:
+                w = []
             
             y = []
             for a in w: # a is the word
                 for t in tables:
                     if a in x.get(t):
-                        y.append([t,a])
-                        
-            return y
+                        try:
+                            y.append([t,a])
+                        except Exception as e:
+                            y = []
+            
+            if len(y) > 0:
+                return y
+            else:
+                return "no matches found"
    
         
