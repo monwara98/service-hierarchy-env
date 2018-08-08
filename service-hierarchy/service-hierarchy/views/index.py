@@ -94,15 +94,10 @@ else:
             
             x = {}
             
-            # 1. loop through all of the tables in the odi_test database
-            # 2. only add those databases that have 'number' or 'masterserviceid' as
-            # their column names
-            # 3. only accept those databases that have some actual data[rows] in them
+            tables = ['map_dotcom', 'map_dataleaks', 'map_servicenow', 'map_gdpr', 
+                      'map_pentest', 'map_remoteconnectivity', 'map_bcp', 'map_pas',
+                      'masterservicemapping']
             
-            # perhaps consider automating this as well
-            tables = ['isin','map_bcp','map_dataleaks','map_dotcom','map_gdpr',
-                      'map_isrisk', 'map_pas', 'map_pentest','map_remoteconnectivity',
-                      'map_servicenow', 'problem', 'problem_old']
             for t in tables:
                 cursor.execute("select * from odi_test." + t)
                 colnames = [desc[0] for desc in cursor.description]
@@ -114,14 +109,12 @@ else:
                     elif 'name' in colnames:
                         cursor.execute("select name,masterserviceid from odi_test." + t)
                         l = cursor.fetchall()
-                elif 'u_business_service' in colnames:
-                    if 'number' in colnames: 
-                        cursor.execute("select u_business_service,number from odi_test." + t)
-                        l = cursor.fetchall()
-                elif 'business_service' in colnames:
-                    if 'number' in colnames:
-                        cursor.execute("select business_service,number from odi_test." + t)
-                        l = cursor.fetchall()
+                elif ('service' in colnames) & ('pkey' in colnames):
+                    print("hello?")
+                    cursor.execute("select service,pkey from odi_test." + t)
+                    l = cursor.fetchall()
+                else:
+                    l = []
                 
              
                 cleaningLists(l)
@@ -130,17 +123,12 @@ else:
                 x[t] = d1
                 
                 
-            
-            
-            
-            
             z = {}
             for t in tables:
                 d = x.get(t)
                 d1 = lower_dict(d)
                 z = {**z,**d1}
                 
-            
                 
             w = lookup(word,z)
             
@@ -151,8 +139,6 @@ else:
                     if a in x.get(t):
                         y.append([t,a])
                         
-                         
-                
             return y
    
         
