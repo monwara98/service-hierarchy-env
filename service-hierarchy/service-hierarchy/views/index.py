@@ -34,6 +34,18 @@ else:
                         yList = searchingDictionary(name)
                         selection = request.form.get('drop_down')
                         
+                        #for t in tables:
+                        #    if selection == t:
+                        #        for y in yList:
+                        #            if y[0] == t:
+                        #                new_list.append(y)
+                        #        
+                        #    elif selection == '':
+                        #        new_list = searchingDictionary(name)    
+                        #
+                        #    else:
+                        #        new_list = []
+                        
                         if selection == 'map_dotcom':
                             for y in yList:
                                 if y[0] == 'map_dotcom':
@@ -79,14 +91,14 @@ else:
                                 if y[0] == 'masterservicemapping':
                                     new_list.append(y)
                                     
-                        else:
+                        elif selection == '':
                             new_list = searchingDictionary(name)
-                        return render_template('index.html', form=form, new_list=new_list, tables=tables)
                         
-                    #elif selection == '
+                        else:
+                            new_list = []
                         
-                        return render_template('index.html', form=form, new_list=new_list, tables=tables)
                         
+                       
                     except Exception as e:
                         new_list = []
                 else:
