@@ -29,11 +29,12 @@
         </div>
         
         <div class="dropdown">
-        <select name="tables" method="GET" action="/">
-            <option value="{{tables[0]}}" selected>{{tables[0]}}</option>
+        <select name="drop_down" method="GET" action="/">
+            <option value="{{tables[0]}}" selected>choose table</option>
             {% for t in tables[1:] %}
                 <option value="{{t}}">{{t}}</option>
             {% endfor %}
+            
         </select>
         </div>
             
@@ -46,7 +47,7 @@
         <th> Product</th>
         </tr>
         
-        {% for x in yList %}
+        {% for x in new_list %}
             <tr>
             <td>{{ x[0] }}</td>
             <td>{{ x[1] }}</td>

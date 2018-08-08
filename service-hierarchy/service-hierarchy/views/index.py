@@ -17,32 +17,47 @@ else:
     def hello():
         form = ReusableForm(request.form)
         yList = []
+        new_list = []
+        tables = ['', 'map_dotcom', 'map_dataleaks', 'map_servicenow', 'map_gdpr', 
+                      'map_pentest', 'map_remoteconnectivity', 'map_bcp', 'map_pas',
+                      'masterservicemapping']
      
         if request.method == 'POST':
             name=(request.form['name']).lower()
             #dropdown_id = request.form['ID']
             #print(dropdown_id)
-            
             if form.validate(): # save the comment here
                 if searchingDictionary(name) == "no matches found":
                     flash("no matches found")
                 elif len(searchingDictionary(name)) > 0:
                     try:
-                        yList = searchingDictionary(name)
+                        #new_list = []
+                        selection = request.form.get('drop_down')
+                        
+                        if selection == 'map_dotcom':
+                            yList = searchingDictionary(name)
+                            
+                            for y in yList:
+                                if y[0] == 'map_dotcom':
+                                    new_list.append(y)
+                                    
+                        else:
+                            new_list = searchingDictionary(name)
+                        return render_template('index.html', form=form, new_list=new_list, tables=tables)
+                        
+                    #elif selection == '
+                        
+                        return render_template('index.html', form=form, new_list=new_list, tables=tables)
+                        
                     except Exception as e:
-                        yList = []
+                        new_list = []
                 else:
                     flash("search not found")
             else:
                 flash('All the form fields are required. ')
-                
-        #if request.method == 'GET':
-        #    colours = ['Red', 'Blue', 'Black', 'Orange']
-        tables = ['', 'map_dotcom', 'map_dataleaks', 'map_servicenow', 'map_gdpr', 
-                      'map_pentest', 'map_remoteconnectivity', 'map_bcp', 'map_pas',
-                      'masterservicemapping']
         
-        return render_template('index.html', form=form, yList=yList, tables=tables)
+        
+        return render_template('index.html', form=form, new_list=new_list, tables=tables)
     
     
         
