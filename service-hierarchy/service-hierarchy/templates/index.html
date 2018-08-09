@@ -24,10 +24,12 @@
         {% endwith %}
         </div>
         
-        <div align="center">
-        <div class="styled-select slate" style="text-align:center;margin-top:-5px;">
+        <br>
+        
+        <div align="center" style="margin-top:-20px;">
+        <div class="styled-select slate" style="text-align:center;">
         <select name="drop_down" method="GET" action="/">
-            <option value="{{tables[0]}}" selected>choose table</option>
+            <option value="{{tables[0]}}" selected>all tables</option>
             {% for t in tables[1:] %}
                 <option value="{{t}}">{{t}}</option>
             {% endfor %}
