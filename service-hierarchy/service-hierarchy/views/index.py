@@ -42,6 +42,7 @@ else:
                         yList = searchingDictionary(name)
                         selection = request.form.get('drop_down')
                         
+                # need to automate this somehow in a loop
                         if selection == 'map_dotcom':
                             for y in yList:
                                 if y[0] == 'map_dotcom':
@@ -96,6 +97,7 @@ else:
                         
                        
                     except Exception as e:
+                        print("error")
                         new_list = []
                 else:
                     flash("search not found")
@@ -113,7 +115,7 @@ else:
                 list.remove(l)
                 
     
-    def lower_dict(d):
+    def lower_dict(d): # used for case insensitivity
         try:
             new_dict = dict((k.lower(), v) for k, v in d.items())
         except Exception as e:
@@ -123,7 +125,7 @@ else:
                 
                 
                 
-    def searchByValue(d,v):
+    def searchByValue(d,v): # returns list of keys that have the same masterserviceid
         try:
             listOfKeys = [key  for (key, value) in d.items() if value == v]
         except Exception as e:
@@ -134,7 +136,7 @@ else:
     
     
     
-    def lookup(word,d):
+    def lookup(word,d): # looks for the value of the key in the dictionary
         if word in d:
             try:
                 k = d[word]
@@ -148,7 +150,7 @@ else:
    
     
     def searchingDictionary(word):
-        try:
+        try: # connecting to the database
             con = p.connect("dbname='odi' user='fmopex_test_ro' host='fmopex.cl19fspdhrve.eu-west-1.rds.amazonaws.com' password = 'admin'")
         except Exception as e:
             print("\ncould not connect to database\n")
