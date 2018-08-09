@@ -7,6 +7,12 @@ class ReusableForm(Form):
     name = TextField('', validators=[validators.required()])
         
     
+# try deploying app with:
+# 1. Heroku
+# 2. Docker
+# 3. AWS - Lambda, EC2    
+    
+    
 try:
     bp = Blueprint(__name__, __name__, template_folder='templates')
 except Exception as e:
