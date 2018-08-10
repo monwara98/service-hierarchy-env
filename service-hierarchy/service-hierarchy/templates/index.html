@@ -9,7 +9,7 @@
  
             <div class="inputtext">
             <div class="hide">
-                {{ form.name.label }} {{ form.name }} 
+                {{ form.name.label }} {{ form.name }} <!-- for the search engine -->
             </div>
             </div>
 
@@ -17,7 +17,7 @@
             {% if messages %}
                 <ul>
                     {% for message in messages %}
-                        {{ message[1] }}
+                        {{ message[1] }} <!-- displays results -->
                     {% endfor %}
                 </ul>
             {% endif %}
@@ -31,19 +31,19 @@
         <select name="drop_down" method="GET" action="/">
             <option value="{{tables[0]}}" selected>all tables</option>
             {% for t in tables[1:] %}
-                <option value="{{t}}">{{t}}</option>
+                <option value="{{t}}">{{t}}</option> <!-- drop down box -->
             {% endfor %}
             
         </select>
         </div></div>
         
         
-        <div class="submit">
+        <div class="submit"> <!-- submit button -->
             <input type="submit" value="Submit" />
         </div> 
             
         
-        <div id="tableContainer-1">
+        <div id="tableContainer-1"> <!-- displays the actual table that contains all the data -->
         <div id="tableCountainer-2">
         <table id="myTable" border='2'>
         <tr>
