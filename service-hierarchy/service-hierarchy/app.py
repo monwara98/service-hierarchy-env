@@ -7,6 +7,18 @@ except Exception as e:
     app = None
 
 if app != None:    
-    app.register_blueprint(index_bp)
-    app.config.from_object(__name__)
-    app.config['SECRET_KEY'] = '7d441f27d441f27567d441f2b6176a'
+    
+    try:
+        app.register_blueprint(index_bp)
+    except Exception as e:
+        print("error registering the app")
+        
+    try:       
+        app.config.from_object(__name__)
+    except Exception as e:
+        print("error configuring the app")
+        
+    try:    
+        app.config['SECRET_KEY'] = 'secret'
+    except Exception as e:
+        print("error configuring the secret key")

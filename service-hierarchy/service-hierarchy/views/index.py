@@ -21,41 +21,48 @@ else:
 
     @bp.route("/", methods=['GET', 'POST'])
     def hello():
-        form = ReusableForm(request.form)
-        yList = []
-        new_list = []
-        tables = ['', 'map_dotcom', 'map_dataleaks', 'map_servicenow', 'map_gdpr', 
-                      'map_pentest', 'map_remoteconnectivity', 'map_bcp', 'map_pas',
-                      'masterservicemapping']
-     
-        if request.method == 'POST':
-            name=(request.form['name']).lower()
-            
-            if form.validate(): # save the comment here
+        try:
+            form = ReusableForm(request.form)
+        except Exception as e:
+            print("error with the form")
+        else:
+            yList = []
+            new_list = []
+            tables = ['', 'map_dotcom', 'map_dataleaks', 'map_servicenow', 'map_gdpr', 
+                          'map_pentest', 'map_remoteconnectivity', 'map_bcp', 'map_pas',
+                          'masterservicemapping']
+         
+            if request.method == 'POST':
+                try:
+                    name=(request.form['name']).lower()
+                except Exception as e:
+                    print("error with the name")
                 
-                if searchingDictionary(name) == "no matches found":
-                    flash("no matches found")
+                if form.validate(): # save the comment here
                     
-                elif len(searchingDictionary(name)) > 0:
-                    
-                    try:
+                    if searchingDictionary(name) == "no matches found":
+                        flash("no matches found")
                         
-                        yList = searchingDictionary(name)
-                        selection = request.form.get('drop_down')
+                    elif len(searchingDictionary(name)) > 0:
                         
-                        for t in tables:
-                            if selection == t:
-                                for y in yList:
-                                    if t in y[0]:
-                                        new_list.append(y)
-                       
-                    except Exception as e:
-                        print("error")
-                        new_list = []
+                        try:
+                            
+                            yList = searchingDictionary(name)
+                            selection = request.form.get('drop_down')
+                            
+                            for t in tables:
+                                if selection == t:
+                                    for y in yList:
+                                        if t in y[0]:
+                                            new_list.append(y)
+                           
+                        except Exception as e:
+                            print("error")
+                            new_list = []
+                    else:
+                        flash("search not found")
                 else:
-                    flash("search not found")
-            else:
-                flash('All the form fields are required. ')
+                    flash('All the form fields are required. ')
         
         
         return render_template('index.html', form=form, new_list=new_list, tables=tables)
@@ -111,7 +118,10 @@ else:
         else:
             print("\nconnected to database\n")
         
-            cursor = con.cursor() 
+            try:         
+                cursor = con.cursor() 
+            except Exception as e:
+                print("error with the cursor")
             
             x = {}
             
@@ -120,31 +130,38 @@ else:
                       'masterservicemapping']
             
             for t in tables:
-                cursor.execute("select * from odi_test." + t)
-                colnames = [desc[0] for desc in cursor.description]
+                try:
+                    cursor.execute("select * from odi_test." + t)
+                except Exception as e:
+                    print("could not execute cursor")
+                else:
+                    colnames = [desc[0] for desc in cursor.description]
                 
                 if 'masterserviceid' in colnames:
                     
                     if 'service' in colnames:
                         try:
                             cursor.execute("select service,masterserviceid from odi_test." + t)
-                            l = cursor.fetchall()
                         except Exception as e:
                             l = []
+                        else:
+                            l = cursor.fetchall()
                             
                     elif 'name' in colnames:
                         try:
                             cursor.execute("select name,masterserviceid from odi_test." + t)
-                            l = cursor.fetchall()
                         except Exception as e:
                             l = []
+                        else:
+                            l = cursor.fetchall()
                             
                 elif ('service' in colnames) & ('pkey' in colnames):
                     try:
                         cursor.execute("select service,pkey from odi_test." + t)
-                        l = cursor.fetchall()
                     except Exception as e:
                         l = []
+                    else:
+                        l = cursor.fetchall()
                         
                 else:
                     l = []
@@ -192,17 +209,23 @@ else:
                 w = []
             
             y = []
-            for a in w: # a is the word
-                for t in tables:
-                    if a in x.get(t):
-                        try:
-                            y.append([t,a])
-                        except Exception as e:
-                            y = []
+            try:
+                for a in w: # a is the word
+                    for t in tables:
+                        if a in x.get(t):
+                            try:
+                                y.append([t,a])
+                            except Exception as e:
+                                y = []
+            except Exception as e:
+                y = []
             
-            if len(y) > 0:
-                return y
-            else:
-                return "no matches found"
+            try:
+                if len(y) > 0:
+                    return y
+                else:
+                    return "no matches found"
+            except Exception as e:
+                print("error with returning the list")
    
         
