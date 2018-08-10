@@ -39,62 +39,15 @@ else:
                 elif len(searchingDictionary(name)) > 0:
                     
                     try:
+                        
                         yList = searchingDictionary(name)
                         selection = request.form.get('drop_down')
                         
-                # need to automate this somehow in a loop
-                        if selection == 'map_dotcom':
-                            for y in yList:
-                                if y[0] == 'map_dotcom':
-                                    new_list.append(y)
-                                    
-                        elif selection == 'map_dataleaks':
-                            for y in yList:
-                                if y[0] == 'map_dataleaks':
-                                    new_list.append(y)
-                        
-                        elif selection == 'map_servicenow':
-                            for y in yList:
-                                if y[0] == 'map_servicenow':
-                                    new_list.append(y)
-                            
-                        elif selection == 'map_gdpr':
-                            for y in yList:
-                                if y[0] == 'map_gdpr':
-                                    new_list.append(y)
-                            
-                        elif selection == 'map_pentest':
-                            for y in yList:
-                                if y[0] == 'map_pentest':
-                                    new_list.append(y)
-                            
-                        elif selection == 'map_remoteconnectivity':
-                            for y in yList:
-                                if y[0] == 'map_remoteconnectivity':
-                                    new_list.append(y)
-                            
-                        elif selection == 'map_bcp':
-                            for y in yList:
-                                if y[0] == 'map_bcp':
-                                    new_list.append(y)
-                            
-                        elif selection == 'map_pas':
-                            for y in yList:
-                                if y[0] == 'map_pas':
-                                    new_list.append(y)
-                            
-                        elif selection == 'masterservicemapping':
-                            for y in yList:
-                                if y[0] == 'masterservicemapping':
-                                    new_list.append(y)
-                                    
-                        elif selection == '':
-                            new_list = searchingDictionary(name)
-                        
-                        else:
-                            flash("no matches found")
-                            new_list = []
-                        
+                        for t in tables:
+                            if selection == t:
+                                for y in yList:
+                                    if t in y[0]:
+                                        new_list.append(y)
                        
                     except Exception as e:
                         print("error")
@@ -114,6 +67,7 @@ else:
             if l[1] == None:
                 list.remove(l)
                 
+    
     
     def lower_dict(d): # used for case insensitivity
         try:
