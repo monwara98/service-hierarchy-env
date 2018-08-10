@@ -4,14 +4,10 @@ import psycopg2 as p
 
 
 class ReusableForm(Form):
-    name = TextField('', validators=[validators.required()])
-        
-    
-# try deploying app with:
-# 1. Heroku
-# 2. Docker
-# 3. AWS - Lambda, EC2    
-    
+    try:
+        name = TextField('', validators=[validators.required()])
+    except Exception as e:
+        print("error with the name")
     
 try:
     bp = Blueprint(__name__, __name__, template_folder='templates')
@@ -28,26 +24,36 @@ else:
         else:
             yList = []
             new_list = []
+            
+            # This table consists of all the services that have 'masterserviceid' as a column
+            # name. It also contains 'masterservicemapping'. These were the only service tables
+            # that Martin wanted
             tables = ['', 'map_dotcom', 'map_dataleaks', 'map_servicenow', 'map_gdpr', 
                           'map_pentest', 'map_remoteconnectivity', 'map_bcp', 'map_pas',
                           'masterservicemapping']
          
             if request.method == 'POST':
                 try:
-                    name=(request.form['name']).lower()
+                    name=(request.form['name']).lower() # lower case for case insensitivity
                 except Exception as e:
                     print("error with the name")
                 
                 if form.validate(): # save the comment here
                     
+                    # if no matches were found then the table would be empty and the user
+                    # is alerted of this
                     if searchingDictionary(name) == "no matches found":
                         flash("no matches found")
                         
+                    # if some matches were found...    
                     elif len(searchingDictionary(name)) > 0:
                         
                         try:
                             
+                            # then these matches are displayed in a table format
                             yList = searchingDictionary(name)
+                            
+                            # selection is whatever is selected from the drop down menu
                             selection = request.form.get('drop_down')
                             
                             for t in tables:
@@ -69,14 +75,16 @@ else:
     
     
     
+    # this just cleans the lists as some of them have 'None' as their masterserviceid,
+    # and we don't want that
     def cleaningLists(list):
         for l in list[:]:
             if l[1] == None:
                 list.remove(l)
                 
     
-    
-    def lower_dict(d): # used for case insensitivity
+    # used for case insensitivity
+    def lower_dict(d): 
         try:
             new_dict = dict((k.lower(), v) for k, v in d.items())
         except Exception as e:
@@ -85,8 +93,9 @@ else:
             return new_dict
                 
                 
-                
-    def searchByValue(d,v): # returns list of keys that have the same masterserviceid
+         
+    # returns list of keys that have the same masterserviceid        
+    def searchByValue(d,v): 
         try:
             listOfKeys = [key  for (key, value) in d.items() if value == v]
         except Exception as e:
@@ -97,7 +106,8 @@ else:
     
     
     
-    def lookup(word,d): # looks for the value of the key in the dictionary
+    # looks for the value of the key in the dictionary
+    def lookup(word,d): 
         if word in d:
             try:
                 k = d[word]
@@ -111,10 +121,23 @@ else:
    
     
     def searchingDictionary(word):
-        try: # connecting to the database
+        
+        # connecting to the odi database, if it can't connect the first time then it will try 3 times
+        attempts = 3
+        attemptCount = 1
+        try: 
             con = p.connect("dbname='odi' user='fmopex_test_ro' host='fmopex.cl19fspdhrve.eu-west-1.rds.amazonaws.com' password = 'admin'")
         except Exception as e:
-            print("\ncould not connect to database\n")
+            print("\ncould not connect to database, attempt: %s" % attemptCount)
+            attempts = attempts - 1
+            
+            while attempts >= 1:
+                attemptCount = attemptCount + 1
+                try:
+                    con = p.connect("dbname='odi' user='fmopex_test_ro' host='fmopex.cl19fspdhrve.eu-west-1.rds.amazonaws.com' password = 'admin'")
+                except Exception as e:
+                    print("\ncould not connect to database, attempt: %s" % attemptCount)
+                    attempts = attempts - 1
         else:
             print("\nconnected to database\n")
         
@@ -125,18 +148,23 @@ else:
             
             x = {}
             
+            # same tables list as before
             tables = ['map_dotcom', 'map_dataleaks', 'map_servicenow', 'map_gdpr', 
                       'map_pentest', 'map_remoteconnectivity', 'map_bcp', 'map_pas',
                       'masterservicemapping']
             
+            # select statement for all the services in the tables list
             for t in tables:
                 try:
                     cursor.execute("select * from odi_test." + t)
                 except Exception as e:
                     print("could not execute cursor")
                 else:
+                    # returns a list of all the column names for particalur service
                     colnames = [desc[0] for desc in cursor.description]
                 
+                # we want to only include those services that have 'masterserviceid' as a column name
+                # has a select statement for this
                 if 'masterserviceid' in colnames:
                     
                     if 'service' in colnames:
@@ -154,7 +182,8 @@ else:
                             l = []
                         else:
                             l = cursor.fetchall()
-                            
+                 
+                # this select statement is specifically for masterservicemapping    
                 elif ('service' in colnames) & ('pkey' in colnames):
                     try:
                         cursor.execute("select service,pkey from odi_test." + t)
@@ -166,19 +195,25 @@ else:
                 else:
                     l = []
                 
-             
+                # cleaning the list to get rid if any services that have 'None' as their 
+                # masterservicemapping
                 cleaningLists(l)
                 
+                # converting the lists into a dictionary
                 try:
                     d = dict(l)
                 except Exception as e:
                     d = {}
                 
+                # making the dictionary case insensitive
                 try:
                     d1 = lower_dict(d)
                 except Exception as e:
                     d1 = {}
                 
+                # putting that dictionary into another dictionary
+                # e.g. { key: {key : value} }
+                # this is because i wanted to associate the table names with the products
                 try:
                     x[t] = d1
                 except Exception as e:
@@ -198,11 +233,13 @@ else:
                 except Exception as e:
                     d1 = {}
                     
+                # joinging the two dictionaries together    
                 try:
                     z = {**z,**d1}
                 except Exception as e:
                     z = {}
                 
+            # looks for the value of the word/key in the specified dictionary    
             try:
                 w = lookup(word,z)
             except Exception as e:
@@ -214,12 +251,14 @@ else:
                     for t in tables:
                         if a in x.get(t):
                             try:
+                                # creates a final list of tuples/pairs (table name, product)
                                 y.append([t,a])
                             except Exception as e:
                                 y = []
             except Exception as e:
                 y = []
             
+            # returning the list as long as it contains something
             try:
                 if len(y) > 0:
                     return y
